@@ -1,9 +1,14 @@
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
+from hoverable import HoverBehavior
+from kivy.uix.image import Image
+from kivy.uix.behaviors import ButtonBehavior
 import json
+import glob
 from datetime import datetime
-
+from pathlib import Path
+import random
 Builder.load_file('layout.kv')
 
 
@@ -45,6 +50,22 @@ class LoginScreenSuccess(Screen):
     def log_out(self):
         self.manager.transition.direction = 'right'
         self.manager.current = "login_screen"
+
+    def get_quote(self, feel):
+        feel = feel.lower()
+        available_feelings = glob.glob('quotes/*txt')
+        available_feelings = [Path(filename).stem for filename in
+                              available_feelings]
+        if feel in available_feelings:
+            with open(f"quotes/{feel}.txt", encoding="utf-8") as file:
+                quotes = file.readlines()
+            self.ids.quote.text = random.choice(quotes)
+        else:
+            self.ids.quote.text = 'Feeling Currently Unavailable!'
+
+
+class ImageButton(ButtonBehavior, HoverBehavior, Image):
+    pass
 
 
 class MainApp(App):
