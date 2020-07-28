@@ -16,6 +16,9 @@ class LoginScreen(Screen):
     def sign_up(self):
         self.manager.current = 'sign_up_screen'
 
+    def forgot_screen(self):
+        self.manager.current = 'forgot_password_screen'
+
     def login(self, user, pword):
         with open('users.json') as file:
             users = json.load(file)
@@ -62,6 +65,16 @@ class LoginScreenSuccess(Screen):
             self.ids.quote.text = random.choice(quotes)
         else:
             self.ids.quote.text = 'Feeling Currently Unavailable!'
+
+
+class ForgotPasswordScreen(Screen):
+    def search_password(self, user):
+        with open('users.json', 'r') as file:
+            users = json.load(file)
+            if user in users:
+                self.ids.userpass.text = 'Password: '+users[user]['password']
+            else:
+                self.ids.userpass.text = 'Username does not exist!'
 
 
 class ImageButton(ButtonBehavior, HoverBehavior, Image):

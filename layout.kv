@@ -39,6 +39,7 @@
                 background_color: 1, 1, 1, 0
                 opacity: 1 if self.state == 'normal' else 0.5
                 color: 0.1, 0.7, 1, 1
+                on_press: root.forgot_screen()
             Button:
                 text: 'Sign Up'
                 on_press: root.sign_up()
@@ -77,9 +78,12 @@
         cols: 1
         Label:
             text: "Sign Up Successfull!"
-        Button:
-            text: "Login Page"
-            on_press: root.return_login()
+        RelativeLayout:
+            Button:
+                text: "Login Page"
+                on_press: root.return_login()
+                size_hint: 0.2, 0.2
+                pos_hint: {'center_x': 0.5, 'center_y': 0.6}
 
 <LoginScreenSuccess>:
     GridLayout:
@@ -107,6 +111,31 @@
                 text_size: self.width, None
                 size_hint_y: None
                 height: self.texture_size[1]
+
+<ForgotPasswordScreen>:
+    GridLayout:
+        cols: 1
+        padding: 30, 30
+        spacing: 30, 30
+        RelativeLayout:
+            ImageButton:
+                on_press: root.log_out()
+                source: 'logout-xxlHover.png' if self.hovered else "logout-xxl.png"
+                size_hint: 0.4, 0.4
+                pos_hint: {'center_x': 0.99, 'center_y': 0.95}
+        Label:
+            text: 'Enter username and your password will be given.'
+        TextInput:
+            id: user
+            hint_text: 'Username'
+        GridLayout:
+            cols: 1
+            Button:
+                text: 'Enter'
+                on_press: root.search_password(root.ids.user.text)
+            Label:
+                id: userpass
+                text: ''
 <RootWidget>:
     LoginScreen:
         name: 'login_screen'
@@ -115,4 +144,6 @@
     SignUpScreenSuccess:
         name: 'sign_up_screen_success'
     LoginScreenSuccess:
-        name: 'login_screen_success'            
+        name: 'login_screen_success'
+    ForgotPasswordScreen:
+        name: 'forgot_password_screen'            
